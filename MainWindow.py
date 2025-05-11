@@ -174,7 +174,7 @@ gestor_inst = GestorInstrucciones(instrucciones_scrollable)
 btn_agregar = ctk.CTkButton(
     button_frame,
     text="➕ Añadir Instrucción",
-    command=gestor_inst.agregar,
+    command=lambda: instrucciones_widgets.append(gestor_inst.agregar()),
     width=120,
     fg_color="#2CC985",
     hover_color="#239561"
@@ -184,14 +184,16 @@ btn_agregar.pack(side="left", padx=10)
 btn_eliminar = ctk.CTkButton(
     button_frame,
     text="➖ Eliminar Instrucción",
-    command=gestor_inst.eliminar,
+    command=lambda: gestor_inst.eliminar() and instrucciones_widgets.pop(),
     width=120,
     fg_color="#FF4D4D",
     hover_color="#CC3E3E"
 )
 btn_eliminar.pack(side="right", padx=10)
 
-
+gestor_inst = GestorInstrucciones(instrucciones_scrollable)
+# Add this line to initialize the global list with the initial widget
+instrucciones_widgets = gestor_inst.get_widgets()
 
 # Caja 1 textos
 label_nombre = ctk.CTkLabel(Cuadro1, text="👤 Nombre:", font=label_font, text_color=color_label)
