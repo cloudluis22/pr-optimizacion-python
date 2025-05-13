@@ -53,10 +53,21 @@ class GestorInstrucciones:
 
         frame.pack(fill="x", pady=3)
         self.instrucciones_widgets.append(frame)
+        
+        # Devolver el widget para que pueda ser añadido a la lista global
+        return frame
 
     def agregar(self):
-        self._agregar_widget()
+        widget = self._agregar_widget()
+        return widget
 
     def eliminar(self):
         if len(self.instrucciones_widgets) > 1:
-            self.instrucciones_widgets.pop().destroy()
+            widget = self.instrucciones_widgets.pop()
+            widget.destroy()
+            return True
+        return False
+            
+    def get_widgets(self):
+        """Retorna la lista de widgets de instrucciones"""
+        return self.instrucciones_widgets

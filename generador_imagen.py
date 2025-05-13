@@ -3,6 +3,7 @@ import textwrap
 import tempfile
 import webbrowser
 import os
+import customtkinter as ctk
 
 class GeneradorImagen:
     def __init__(self, entry_nombre, entry_edad, entry_fecha, entry_peso, entry_talla, entry_ta,
@@ -186,12 +187,15 @@ class GeneradorImagen:
                 y += (bbox[3]-bbox[1]) + espacio
         else:
             instrucciones = []
-            for w in self.instrucciones_widgets:
-                for c in w.winfo_children():
-                    if hasattr(c, 'get'):
-                        txt = c.get("1.0", "end-1c").strip()
-                        if txt: instrucciones.append(txt)
+            for widget in self.instrucciones_widgets:
+                # Buscar el textbox dentro del widget
+                for child in widget.winfo_children():
+                    if isinstance(child, ctk.CTkTextbox):
+                        texto = child.get("1.0", "end-1c").strip()
+                        if texto:
+                            instrucciones.append(texto)
                         break
+            
             y = 1100
             for i, instr in enumerate(instrucciones, 1):
                 segs = instr.split('\n')
@@ -204,9 +208,7 @@ class GeneradorImagen:
                     bbox = draw.textbbox((0,0), txt, font=fuente)
                     y += (bbox[3]-bbox[1]) + espacio
                 y += espacio*2
-
         self._crear_pdf(imagen)
-
     def generar_sin_formato(self):
         # Similar a generar_con_formato pero simplificado
         imagen = Image.new("RGB", (2550, 3300), color="white")
@@ -248,14 +250,17 @@ class GeneradorImagen:
                 y += (bbox[3]-bbox[1]) + espacio
         else:
             instrucciones = []
-            y = 1100
-            for w in self.instrucciones_widgets:
-                for c in w.winfo_children():
-                    if hasattr(c, 'get'):
-                        txt = c.get("1.0", "end-1c").strip()
-                        if txt: instrucciones.append(txt)
+            for widget in self.instrucciones_widgets:
+                # Buscar el textbox dentro del widget
+                for child in widget.winfo_children():
+                    if isinstance(child, ctk.CTkTextbox):
+                        texto = child.get("1.0", "end-1c").strip()
+                        if texto:
+                            instrucciones.append(texto)
                         break
-            for i, instr in enumerate(instrucciones,1):
+            
+            y = 1100
+            for i, instr in enumerate(instrucciones, 1):
                 segs = instr.split('\n')
                 envs = []
                 for s in segs:
@@ -266,5 +271,5 @@ class GeneradorImagen:
                     bbox = draw.textbbox((0,0), txt, font=fuente)
                     y += (bbox[3]-bbox[1]) + espacio
                 y += espacio*2
-
+                
         self._crear_pdf(imagen)

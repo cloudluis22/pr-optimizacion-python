@@ -223,27 +223,25 @@ def crear_boton(parent, texto, comando, fg_color, hover_color, side="left", padx
 # Botones de control para instrucciones
 btn_agregar = crear_boton(
     button_frame,
-    "➕ Añadir Instrucción",
-    gestor_inst.agregar,
-    COLORS["success"],
-    COLORS["success_hover"]
+    text="➕ Añadir Instrucción",
+    command=lambda: instrucciones_widgets.append(gestor_inst.agregar()),
+    width=120,
+    fg_color="#2CC985",
+    hover_color="#239561"
 )
 
 btn_eliminar = crear_boton(
     button_frame,
-    "➖ Eliminar Instrucción",
-    gestor_inst.eliminar,
-    COLORS["danger"],
-    COLORS["danger_hover"],
-    side="right"
+    text="➖ Eliminar Instrucción",
+    command=lambda: gestor_inst.eliminar() and instrucciones_widgets.pop(),
+    width=120,
+    fg_color="#FF4D4D",
+    hover_color="#CC3E3E"
 )
 
-# Campos de texto (usando la función crear_label_entry)
-_, entry_nombre = crear_label_entry(Cuadro1, "Nombre", x_label, al_nombre, x_entry, relwidth_entry=0.7, emoji="👤")
-_, entry_edad = crear_label_entry(Cuadro1, "Edad", x_label, al_edad, x_entry, relwidth_entry=0.2, emoji="🎂")
-
-# Para el campo fecha con botón especial
-label_fecha, entry_fecha = crear_label_entry(Cuadro1, "Fecha", x_label, al_fecha, x_entry, relwidth_entry=0.15, emoji="📅")
+gestor_inst = GestorInstrucciones(instrucciones_scrollable)
+# Add this line to initialize the global list with the initial widget
+instrucciones_widgets = gestor_inst.get_widgets()
 
 # Botón calendario
 btn_calendario = ctk.CTkButton(
